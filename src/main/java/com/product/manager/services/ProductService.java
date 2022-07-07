@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 import com.product.manager.entities.Product;
 import com.product.manager.repositories.ProductRepository;
 
-
-
 @Service
 @Transactional
 public class ProductService {

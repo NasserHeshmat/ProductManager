@@ -3,8 +3,11 @@ package com.product.manager.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.product.manager.entities.User;
 import com.product.manager.repositories.UserRepository;
@@ -39,5 +42,13 @@ public class UserService {
 		Optional<User> repoUser = repo.findById(id);
 		
 		return repoUser.get();
+	}
+
+	public void deleteCartProduct(int id, HttpSession session,Model model, ProductService service) {
+		User currentUser = this.getUserById((Integer) session.getAttribute("userId"));
+		currentUser.removeProduct(service.get(id));
+		
+		model.addAttribute("user",currentUser);
+		
 	}
 }

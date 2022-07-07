@@ -30,15 +30,14 @@ public class ProductController {
 	@GetMapping("/new")
 	public String showNewProductPage(Model model) {
 	    Product product = new Product();
-	    model.addAttribute("product", product);
-	     
+	    model.addAttribute("product", product);	     
 	    return "new_product";
 	}
 	
 	@GetMapping("/")
 	public String viewHomePage(Model model,HttpSession session) {
-		User currentUser = userService.getUserById((Integer) session.getAttribute("userId"));
-		System.out.println(currentUser.getProducts());
+//		User currentUser = userService.getUserById((Integer) session.getAttribute("userId"));
+//		System.out.println(currentUser.getProducts());
 	    List<Product> listProducts = service.listAll();
 	    model.addAttribute("listProducts", listProducts);
 	     
@@ -47,8 +46,7 @@ public class ProductController {
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String saveProduct(@ModelAttribute("product") Product product) {
-	    service.save(product);
-	     
+	    service.save(product);     
 	    return "redirect:/";
 	}
 	
@@ -75,18 +73,15 @@ public class ProductController {
 	
 	@RequestMapping("/deleteCartProduct/{id}")
 	public String deleteFromCart(@PathVariable(name = "id") int id, HttpSession session,Model model) {
-		User currentUser = userService.getUserById((Integer) session.getAttribute("userId"));
-		currentUser.removeProduct(service.get(id));
 		
-		model.addAttribute("user",currentUser);
+		userService.deleteCartProduct(id,session, model,service);		
 		return "user-homepage";
 	}
 	
 	@RequestMapping("/delete/{id}")
 	public String showDeletePage(@PathVariable(name = "id") int id) {
 		
-		service.delete(id);
-		
+		service.delete(id);		
 		return "redirect:/";
 	}
 
