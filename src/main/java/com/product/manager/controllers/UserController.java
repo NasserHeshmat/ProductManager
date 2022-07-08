@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -35,48 +35,44 @@ public class UserController {
 		
 	@GetMapping("/users/new")
 		public String newUser(Model model) {
-		User user = new User();
-		model.addAttribute("user",user);
+		
+		model.addAttribute("user",new User());
 			return "user-form";
-		
-		
-		
+
 	}
 	
 	@GetMapping("/login")
 	public String loginPage(Model model) {
-		User user = new User();
-		model.addAttribute("user",user);
+
+		model.addAttribute("user",new User());
 		return "login";
 	}
 	
 	
-	@GetMapping("/signout/{id}")
-	public String signout(@PathVariable(name = "id")Integer id,Model model,HttpSession session) {
+	@GetMapping("/signout/")
+	public String signout(Model model,HttpSession session) {
 		
-		session.removeAttribute("userId");
-		User user = new User();
-		model.addAttribute("user",user);
+		service.userSignout( model, session);
+		
 		return "login";
 	}
 	
 	@PostMapping("/users/login")
 	public String loginValidation(User user,Model model,HttpSession session) {
-		User loginUser = service.validateUser(user);
 		
-		if (loginUser == null)
+		
+		if (service.validateUser(user, model, session)) {
+			return "user-homepage";
+		}else {
 			return "wrong-password";
-		session.setAttribute("userId", loginUser.getId());
-		
-		model.addAttribute("user", loginUser);
-		return "user-homepage";
+				}
 	}
 	
 	
 	
 	@PostMapping("/users/save")
 	public String saveUser(User user) {
-		System.out.println(user);
+//		System.out.println(user);
 		service.save(user);
 		return "redirect:/users";
 	}

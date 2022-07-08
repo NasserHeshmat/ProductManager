@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.product.manager.entities.Product;
-import com.product.manager.entities.User;
 import com.product.manager.services.ProductService;
 import com.product.manager.services.UserService;
 
@@ -36,8 +35,6 @@ public class ProductController {
 	
 	@GetMapping("/")
 	public String viewHomePage(Model model,HttpSession session) {
-//		User currentUser = userService.getUserById((Integer) session.getAttribute("userId"));
-//		System.out.println(currentUser.getProducts());
 	    List<Product> listProducts = service.listAll();
 	    model.addAttribute("listProducts", listProducts);
 	     
@@ -50,30 +47,24 @@ public class ProductController {
 	    return "redirect:/";
 	}
 	
+	
 	@RequestMapping("/edit/{id}")
 	public ModelAndView showEditProductPage(@PathVariable(name = "id") int id) {
-	    ModelAndView mav = new ModelAndView("edit_product");
-	    Product product = service.get(id);
-	    mav.addObject("product", product);
-	     
-	    return mav;
+	    return service.getEditMavOfProductById(id);
 	}
 	
 	
 	@RequestMapping("/addToCart/{id}")
 	public String addToCart(@PathVariable(name = "id") int id, HttpSession session,Model model) {
-		User currentUser = userService.getUserById((Integer) session.getAttribute("userId"));
-		currentUser.addProduct(service.get(id));
 		
-		model.addAttribute("user",currentUser);
+		userService.addProductToCart( id,  session, model,service);
 		return "user-homepage";
 	}
 	
 	
 	
 	@RequestMapping("/deleteCartProduct/{id}")
-	public String deleteFromCart(@PathVariable(name = "id") int id, HttpSession session,Model model) {
-		
+	public String deleteFromCart(@PathVariable(name = "id") int id, HttpSession session,Model model) {	
 		userService.deleteCartProduct(id,session, model,service);		
 		return "user-homepage";
 	}

@@ -28,13 +28,18 @@ public class UserService {
 	 repo.save(user);	
 	}
 
-	public User validateUser(User user) {
-		User repoUser;
-		repoUser = repo.findByEmail(user.getEmail());
-		if(repoUser.getPassword().equals(user.getPassword())) {
-			return repoUser;
+	public boolean validateUser(User user, Model model, HttpSession session) {
+		
+		
+		
+		Optional<User> repoUser = repo.findByEmail(user.getEmail());
+		
+		if(repoUser.isPresent() && repoUser.get().getPassword().equals(user.getPassword())) {
+			session.setAttribute("userId", repoUser.get().getId());			
+			model.addAttribute("user", repoUser.get());
+			return true;
 		}else
-			return null;
+			return false;
 		
 	}
 	
@@ -49,6 +54,21 @@ public class UserService {
 		currentUser.removeProduct(service.get(id));
 		
 		model.addAttribute("user",currentUser);
+		
+	}
+
+	public void addProductToCart(int id, HttpSession session, Model model,ProductService prodService) {
+		User currentUser = this.getUserById((Integer) session.getAttribute("userId"));
+		currentUser.addProduct(prodService.get(id));
+		
+		model.addAttribute("user",currentUser);
+		
+	}
+
+	public void userSignout(Model model, HttpSession session) {
+		session.removeAttribute("userId");
+		
+		model.addAttribute("user",new User());
 		
 	}
 }
