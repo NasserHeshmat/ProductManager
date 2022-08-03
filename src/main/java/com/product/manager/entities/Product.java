@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.persistence.Id;
 
 @Entity
@@ -18,6 +21,8 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer Id;
 	
+	@NotBlank(message = "#################### Not balnk error ####################")
+	@Pattern(regexp="^[a-zA-Z0]{3}",message = "#################### pattern error ####################")
 	@Column(name = "name")
     private String name;
 	
