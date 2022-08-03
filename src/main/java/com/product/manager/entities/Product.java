@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.persistence.Id;
 
 @Entity
@@ -18,23 +21,27 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer Id;
 	
+	@NotBlank(message = "#################### Not balnk error: name is required ####################")
+	@Pattern(regexp="^[a-zA-Z0]{3}",message = "#################### pattern error ####################")
 	@Column(name = "name")
     private String name;
 	
+	@NotBlank(message = "#################### Not balnk error: Brand is required ####################")
+	@Pattern(regexp="^[a-zA-Z0]{3}",message = "#################### pattern error ####################")
 	@Column(name = "brand")
     private String brand;
 	
+	@NotBlank(message = "#################### Not balnk error: madein is required ####################")
+	@Pattern(regexp="^[a-zA-Z0]{3}",message = "#################### pattern error ####################")
 	@Column(name = "madein")
     private String madein;
 	
+	
+	@NotBlank(message = "#################### Not balnk error: price is required ####################")
 	@Column(name = "price")
     private float price;
     
-    
 
-	
-	
-	
 	public Product() {
 		
 	}
