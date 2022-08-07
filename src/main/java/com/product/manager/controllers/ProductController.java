@@ -23,11 +23,19 @@ import com.product.manager.services.UserService;
 @Controller
 public class ProductController {
 	
-	@Autowired
-    private ProductService service;
 	
-	@Autowired
-	private UserService userService;
+    private ProductService service;
+    private UserService userService;
+	
+	
+	public ProductController(@Autowired ProductService service, @Autowired UserService userService) {
+		super();
+		this.service = service;
+		this.userService = userService;
+	}
+
+	
+	
 	
 	@GetMapping("/new")
 	public String showNewProductPage(Model model) {
