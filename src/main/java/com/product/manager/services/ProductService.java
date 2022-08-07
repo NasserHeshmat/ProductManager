@@ -15,10 +15,16 @@ import com.product.manager.repositories.ProductRepository;
 @Transactional
 public class ProductService {
  
-    @Autowired
+    
     private ProductRepository repo;
      
-    public List<Product> listAll() {
+    
+    public ProductService(@Autowired ProductRepository repo) {
+		
+		this.repo = repo;
+	}
+
+	public List<Product> listAll() {
         return repo.findAll();
     }
      
